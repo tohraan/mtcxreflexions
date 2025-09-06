@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import profileGreen from '@/assets/profile-green.png';
-import profileRed from '@/assets/profile-red.png';
-import profileYellow from '@/assets/profile-yellow.png';
-import profileBlue from '@/assets/profile-blue.png';
+import profileGreen from '@/assets/profile-green-new.png';
+import profileRed from '@/assets/profile-red-new.png';
+import profileYellow from '@/assets/profile-yellow-new.png';
+import profileBlue from '@/assets/profile-blue-new.png';
 
 interface Profile {
   id: string;

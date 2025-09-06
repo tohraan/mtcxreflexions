@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { Button } from '@/components/ui/button';
+import bitsLogo from '@/assets/bits-logo.png';
 
 interface IntroSequenceProps {
   onComplete: () => void;
@@ -41,35 +42,43 @@ export const IntroSequence = ({ onComplete }: IntroSequenceProps) => {
       }
     });
 
-    // Netflix-style line animation
+    // Netflix-style reveal transition
     tl.to(linesRef.current, {
-      duration: 1.5,
-      scaleX: 1,
+      duration: 1.2,
+      clipPath: "inset(0 0% 0 0)",
       opacity: 1,
       ease: "power2.out"
     })
-    // Logo reveal
+    // Logo scale and reveal with Netflix-style bounce
     .to(logoRef.current, {
-      duration: 1,
-      scale: 1,
+      duration: 1.2,
+      scale: 1.1,
       opacity: 1,
+      y: -10,
+      ease: "back.out(1.4)"
+    }, "-=0.8")
+    .to(logoRef.current, {
+      duration: 0.6,
+      scale: 1,
       y: 0,
-      ease: "back.out(1.7)"
-    }, "-=0.5")
-    // Subtitle fade in
+      ease: "power2.out"
+    })
+    // Subtitle reveal with expand effect
     .to(subtitleRef.current, {
       duration: 0.8,
       opacity: 1,
       y: 0,
+      scaleX: 1,
       ease: "power2.out"
-    }, "-=0.3")
+    }, "-=0.4")
     // Hold for a moment
-    .to({}, { duration: 1.5 })
-    // Fade out
+    .to({}, { duration: 1.8 })
+    // Netflix-style zoom out and fade
     .to(containerRef.current, {
-      duration: 0.8,
+      duration: 1,
+      scale: 0.9,
       opacity: 0,
-      ease: "power2.out"
+      ease: "power2.in"
     });
   };
 
@@ -86,37 +95,41 @@ export const IntroSequence = ({ onComplete }: IntroSequenceProps) => {
       ref={containerRef}
       className="fixed inset-0 z-50 bg-background flex items-center justify-center"
     >
-      {/* Netflix-inspired light streaks background */}
+      {/* Netflix-inspired reveal background */}
       <div
         ref={linesRef}
-        className="absolute inset-0 opacity-0 scale-x-0"
+        className="absolute inset-0 opacity-0"
         style={{
+          clipPath: "inset(0 100% 0 0)",
           background: `
-            linear-gradient(45deg, transparent 40%, rgba(229, 9, 20, 0.1) 45%, rgba(229, 9, 20, 0.3) 50%, rgba(229, 9, 20, 0.1) 55%, transparent 60%),
-            linear-gradient(-45deg, transparent 40%, rgba(229, 9, 20, 0.1) 45%, rgba(229, 9, 20, 0.2) 50%, rgba(229, 9, 20, 0.1) 55%, transparent 60%),
-            linear-gradient(90deg, transparent 30%, rgba(229, 9, 20, 0.05) 50%, transparent 70%)
+            linear-gradient(45deg, transparent 30%, rgba(59, 130, 246, 0.15) 40%, rgba(59, 130, 246, 0.4) 50%, rgba(59, 130, 246, 0.15) 60%, transparent 70%),
+            linear-gradient(-45deg, transparent 30%, rgba(245, 158, 11, 0.15) 40%, rgba(245, 158, 11, 0.3) 50%, rgba(245, 158, 11, 0.15) 60%, transparent 70%),
+            linear-gradient(90deg, rgba(16, 185, 129, 0.1) 0%, rgba(239, 68, 68, 0.2) 50%, rgba(168, 85, 247, 0.1) 100%)
           `,
-          backgroundSize: '200% 200%, 200% 200%, 100% 100%',
-          animation: hasStarted ? 'reveal 2s ease-out' : 'none'
+          backgroundSize: '150% 150%, 150% 150%, 100% 100%'
         }}
       />
 
       {/* Main content */}
       <div className="text-center z-10">
-        {/* BITS Logo - now visible initially */}
+        {/* BITS Logo */}
         <div
           ref={logoRef}
-          className="mb-8 opacity-100 scale-100 translate-y-0"
+          className="mb-8 opacity-0 scale-75 translate-y-8"
         >
-          <div className="w-32 h-32 mx-auto bg-primary rounded-full flex items-center justify-center text-4xl font-bold text-primary-foreground netflix-shadow">
-            BITS
+          <div className="w-40 h-40 mx-auto flex items-center justify-center">
+            <img 
+              src={bitsLogo} 
+              alt="BITS Pilani Dubai Campus" 
+              className="w-full h-full object-contain drop-shadow-2xl"
+            />
           </div>
         </div>
 
-        {/* Subtitle - now visible initially */}
+        {/* Subtitle */}
         <div
           ref={subtitleRef}
-          className="opacity-100 translate-y-0"
+          className="opacity-0 translate-y-4 scale-x-0"
         >
           <h2 className="text-xl font-light text-muted-foreground tracking-wider">
             BPDC, from the lens of student

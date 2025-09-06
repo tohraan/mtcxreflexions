@@ -1,7 +1,9 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Play, Info } from 'lucide-react';
+import { useState } from 'react';
+import { ArrowLeft, Play, Info, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 interface ContentItem {
   id: string;
@@ -9,6 +11,7 @@ interface ContentItem {
   thumbnail: string;
   type: 'video' | 'event' | 'facility' | 'reel';
   description?: string;
+  instagramUrl?: string;
 }
 
 interface ContentRow {
@@ -39,10 +42,34 @@ const mockContent: Record<string, ContentRow[]> = {
     {
       title: "Sports Reels",
       items: [
-        { id: "9", title: "Victory Celebration", thumbnail: "/api/placeholder/300/168", type: "reel" },
-        { id: "10", title: "Training Highlights", thumbnail: "/api/placeholder/300/168", type: "reel" },
-        { id: "11", title: "Team Spirit", thumbnail: "/api/placeholder/300/168", type: "reel" },
-        { id: "12", title: "Match Day", thumbnail: "/api/placeholder/300/168", type: "reel" },
+        { 
+          id: "9", 
+          title: "Victory Celebration", 
+          thumbnail: "/api/placeholder/300/168", 
+          type: "reel",
+          instagramUrl: "https://www.instagram.com/reel/sample1/"
+        },
+        { 
+          id: "10", 
+          title: "Training Highlights", 
+          thumbnail: "/api/placeholder/300/168", 
+          type: "reel",
+          instagramUrl: "https://www.instagram.com/reel/sample2/"
+        },
+        { 
+          id: "11", 
+          title: "Team Spirit", 
+          thumbnail: "/api/placeholder/300/168", 
+          type: "reel",
+          instagramUrl: "https://www.instagram.com/reel/sample3/"
+        },
+        { 
+          id: "12", 
+          title: "Match Day", 
+          thumbnail: "/api/placeholder/300/168", 
+          type: "reel",
+          instagramUrl: "https://www.instagram.com/reel/sample4/"
+        },
       ]
     }
   ],
@@ -118,6 +145,7 @@ const profileColors = {
 export const ProfilePage = () => {
   const { profileId } = useParams<{ profileId: string }>();
   const navigate = useNavigate();
+  const [selectedItem, setSelectedItem] = useState<ContentItem | null>(null);
 
   if (!profileId || !mockContent[profileId]) {
     navigate('/');
@@ -190,6 +218,7 @@ export const ProfilePage = () => {
                 <Card 
                   key={item.id} 
                   className="flex-shrink-0 w-72 bg-card hover:bg-accent transition-colors cursor-pointer netflix-hover"
+                  onClick={() => setSelectedItem(item)}
                 >
                   <div className="aspect-video bg-muted rounded-t-lg relative overflow-hidden">
                     <img 
@@ -199,7 +228,11 @@ export const ProfilePage = () => {
                     />
                     <div className="absolute inset-0 bg-black/20 opacity-0 hover:opacity-100 transition-opacity duration-300" />
                     <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
-                      <Play className="h-12 w-12 text-white" />
+                      {item.type === 'reel' ? (
+                        <ExternalLink className="h-12 w-12 text-white" />
+                      ) : (
+                        <Play className="h-12 w-12 text-white" />
+                      )}
                     </div>
                   </div>
                   <div className="p-4">
@@ -218,6 +251,51 @@ export const ProfilePage = () => {
           </div>
         ))}
       </section>
+
+      {/* Modal for content details */}
+      <Dialog open={!!selectedItem} onOpenChange={() => setSelectedItem(null)}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>{selectedItem?.title}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            {selectedItem?.type === 'reel' && selectedItem.instagramUrl ? (
+              <div className="text-center space-y-4">
+                <p className="text-muted-foreground">
+                  This content is available on Instagram. Click below to view the reel.
+                </p>
+                <Button 
+                  onClick={() => window.open(selectedItem.instagramUrl, '_blank')}
+                  className="w-full"
+                >
+                  <ExternalLink className="h-4 w-4 mr-2" />
+                  View Instagram Reel
+                </Button>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <div className="aspect-video bg-muted rounded-lg relative overflow-hidden">
+                  <img 
+                    src={selectedItem?.thumbnail} 
+                    alt={selectedItem?.title}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <Play className="h-16 w-16 text-white" />
+                  </div>
+                </div>
+                <p className="text-muted-foreground">
+                  {selectedItem?.description || "Explore this content from BPDC."}
+                </p>
+                <Button className="w-full">
+                  <Play className="h-4 w-4 mr-2" />
+                  Play Content
+                </Button>
+              </div>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
