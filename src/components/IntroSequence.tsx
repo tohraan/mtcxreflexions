@@ -38,45 +38,35 @@ export const IntroSequence = ({ onComplete }: IntroSequenceProps) => {
   const startAnimation = () => {
     const tl = gsap.timeline({
       onComplete: () => {
-        setTimeout(onComplete, 500);
+        setTimeout(onComplete, 200);
       }
     });
 
-    // Netflix-style reveal transition
+    // Netflix-style reveal: Red swoosh from left to right
     tl.to(linesRef.current, {
-      duration: 1.2,
-      clipPath: "inset(0 0% 0 0)",
-      opacity: 1,
-      ease: "power2.out"
-    })
-    // Logo scale and reveal with Netflix-style bounce
-    .to(logoRef.current, {
-      duration: 1.2,
-      scale: 1.1,
-      opacity: 1,
-      y: -10,
-      ease: "back.out(1.4)"
-    }, "-=0.8")
-    .to(logoRef.current, {
       duration: 0.6,
-      scale: 1,
-      y: 0,
+      scaleX: 1,
+      transformOrigin: "left center",
       ease: "power2.out"
     })
-    // Subtitle reveal with expand effect
-    .to(subtitleRef.current, {
-      duration: 0.8,
+    // Logo appears during swoosh
+    .to(logoRef.current, {
+      duration: 0.4,
       opacity: 1,
-      y: 0,
-      scaleX: 1,
+      scale: 1,
       ease: "power2.out"
-    }, "-=0.4")
-    // Hold for a moment
-    .to({}, { duration: 1.8 })
-    // Netflix-style zoom out and fade
+    }, "-=0.3")
+    // Subtitle appears
+    .to(subtitleRef.current, {
+      duration: 0.3,
+      opacity: 1,
+      ease: "power2.out"
+    }, "-=0.1")
+    // Hold the logo briefly
+    .to({}, { duration: 1.2 })
+    // Quick fade out like Netflix
     .to(containerRef.current, {
-      duration: 1,
-      scale: 0.9,
+      duration: 0.4,
       opacity: 0,
       ease: "power2.in"
     });
@@ -95,19 +85,10 @@ export const IntroSequence = ({ onComplete }: IntroSequenceProps) => {
       ref={containerRef}
       className="fixed inset-0 z-50 bg-background flex items-center justify-center"
     >
-      {/* Netflix-inspired reveal background */}
+      {/* Netflix red swoosh reveal */}
       <div
         ref={linesRef}
-        className="absolute inset-0 opacity-0"
-        style={{
-          clipPath: "inset(0 100% 0 0)",
-          background: `
-            linear-gradient(45deg, transparent 30%, rgba(59, 130, 246, 0.15) 40%, rgba(59, 130, 246, 0.4) 50%, rgba(59, 130, 246, 0.15) 60%, transparent 70%),
-            linear-gradient(-45deg, transparent 30%, rgba(245, 158, 11, 0.15) 40%, rgba(245, 158, 11, 0.3) 50%, rgba(245, 158, 11, 0.15) 60%, transparent 70%),
-            linear-gradient(90deg, rgba(16, 185, 129, 0.1) 0%, rgba(239, 68, 68, 0.2) 50%, rgba(168, 85, 247, 0.1) 100%)
-          `,
-          backgroundSize: '150% 150%, 150% 150%, 100% 100%'
-        }}
+        className="absolute inset-0 bg-red-600 transform scale-x-0 origin-left"
       />
 
       {/* Main content */}
@@ -115,13 +96,13 @@ export const IntroSequence = ({ onComplete }: IntroSequenceProps) => {
         {/* BITS Logo */}
         <div
           ref={logoRef}
-          className="mb-8 opacity-0 scale-75 translate-y-8"
+          className="mb-8 opacity-0"
         >
           <div className="w-40 h-40 mx-auto flex items-center justify-center">
             <img 
               src={bitsLogo} 
               alt="BITS Pilani Dubai Campus" 
-              className="w-full h-full object-contain drop-shadow-2xl"
+              className="w-full h-full object-contain drop-shadow-2xl filter brightness-0 invert"
             />
           </div>
         </div>
@@ -129,9 +110,9 @@ export const IntroSequence = ({ onComplete }: IntroSequenceProps) => {
         {/* Subtitle */}
         <div
           ref={subtitleRef}
-          className="opacity-0 translate-y-4 scale-x-0"
+          className="opacity-0"
         >
-          <h2 className="text-xl font-light text-muted-foreground tracking-wider">
+          <h2 className="text-xl font-light text-white tracking-wider">
             BPDC, from the lens of student
           </h2>
         </div>
