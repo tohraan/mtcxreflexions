@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { Button } from '@/components/ui/button';
-import bitsLogo from '@/assets/bits-logo.png';
+import bitsLogo from '@/assets/bits-logo-new.png';
 
 interface IntroSequenceProps {
   onComplete: () => void;
@@ -102,7 +102,7 @@ export const IntroSequence = ({ onComplete }: IntroSequenceProps) => {
             <img 
               src={bitsLogo} 
               alt="BITS Pilani Dubai Campus" 
-              className="w-full h-full object-contain drop-shadow-2xl filter brightness-0 invert"
+              className="w-full h-full object-contain drop-shadow-2xl"
             />
           </div>
         </div>
