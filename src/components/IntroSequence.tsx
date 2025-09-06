@@ -15,8 +15,15 @@ export const IntroSequence = ({ onComplete }: IntroSequenceProps) => {
   const [hasStarted, setHasStarted] = useState(false);
 
   useEffect(() => {
+    // Start animation immediately when component mounts
+    setHasStarted(true);
+    setShowSkip(true);
+    setTimeout(() => {
+      startAnimation();
+    }, 500);
+
     const handleScroll = () => {
-      if (!hasStarted && window.scrollY > 50) {
+      if (!hasStarted && window.scrollY > 10) {
         setHasStarted(true);
         setShowSkip(true);
         startAnimation();
@@ -96,20 +103,20 @@ export const IntroSequence = ({ onComplete }: IntroSequenceProps) => {
 
       {/* Main content */}
       <div className="text-center z-10">
-        {/* BITS Logo placeholder */}
+        {/* BITS Logo - now visible initially */}
         <div
           ref={logoRef}
-          className="mb-8 opacity-0 scale-75 translate-y-8"
+          className="mb-8 opacity-100 scale-100 translate-y-0"
         >
           <div className="w-32 h-32 mx-auto bg-primary rounded-full flex items-center justify-center text-4xl font-bold text-primary-foreground netflix-shadow">
             BITS
           </div>
         </div>
 
-        {/* Subtitle */}
+        {/* Subtitle - now visible initially */}
         <div
           ref={subtitleRef}
-          className="opacity-0 translate-y-4"
+          className="opacity-100 translate-y-0"
         >
           <h2 className="text-xl font-light text-muted-foreground tracking-wider">
             BPDC, from the lens of student
@@ -128,10 +135,10 @@ export const IntroSequence = ({ onComplete }: IntroSequenceProps) => {
         </Button>
       )}
 
-      {/* Scroll indicator */}
+      {/* Scroll indicator - only show if animation hasn't started */}
       {!hasStarted && (
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-center animate-bounce">
-          <div className="text-sm text-muted-foreground mb-2">Scroll to begin</div>
+          <div className="text-sm text-muted-foreground mb-2">Animation will begin shortly...</div>
           <div className="w-6 h-10 border-2 border-muted rounded-full mx-auto">
             <div className="w-1 h-3 bg-muted rounded-full mx-auto mt-2 animate-pulse"></div>
           </div>
