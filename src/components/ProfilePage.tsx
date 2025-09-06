@@ -91,6 +91,25 @@ const mockContent: Record<string, ContentRow[]> = {
         { id: "7", title: "Music Club", thumbnail: "/api/placeholder/300/168", type: "video" },
         { id: "8", title: "Photography Club", thumbnail: "/api/placeholder/300/168", type: "video" },
       ]
+    },
+    {
+      title: "Student Life Reels",
+      items: [
+        { 
+          id: "9", 
+          title: "Campus Events", 
+          thumbnail: "/api/placeholder/300/168", 
+          type: "reel",
+          instagramUrl: "https://www.instagram.com/reel/studentlife1/"
+        },
+        { 
+          id: "10", 
+          title: "Club Activities", 
+          thumbnail: "/api/placeholder/300/168", 
+          type: "reel",
+          instagramUrl: "https://www.instagram.com/reel/studentlife2/"
+        },
+      ]
     }
   ],
   academia: [
@@ -111,6 +130,25 @@ const mockContent: Record<string, ContentRow[]> = {
         { id: "7", title: "Electronics", thumbnail: "/api/placeholder/300/168", type: "video" },
         { id: "8", title: "Chemical Engineering", thumbnail: "/api/placeholder/300/168", type: "video" },
       ]
+    },
+    {
+      title: "Academic Reels",
+      items: [
+        { 
+          id: "9", 
+          title: "Lab Experiments", 
+          thumbnail: "/api/placeholder/300/168", 
+          type: "reel",
+          instagramUrl: "https://www.instagram.com/reel/academia1/"
+        },
+        { 
+          id: "10", 
+          title: "Research Highlights", 
+          thumbnail: "/api/placeholder/300/168", 
+          type: "reel",
+          instagramUrl: "https://www.instagram.com/reel/academia2/"
+        },
+      ]
     }
   ],
   nature: [
@@ -130,6 +168,25 @@ const mockContent: Record<string, ContentRow[]> = {
         { id: "6", title: "Green Week", thumbnail: "/api/placeholder/300/168", type: "event" },
         { id: "7", title: "Nature Photography", thumbnail: "/api/placeholder/300/168", type: "video" },
         { id: "8", title: "Campus Birds", thumbnail: "/api/placeholder/300/168", type: "video" },
+      ]
+    },
+    {
+      title: "Nature Reels",
+      items: [
+        { 
+          id: "9", 
+          title: "Campus Wildlife", 
+          thumbnail: "/api/placeholder/300/168", 
+          type: "reel",
+          instagramUrl: "https://www.instagram.com/reel/nature1/"
+        },
+        { 
+          id: "10", 
+          title: "Green Initiatives", 
+          thumbnail: "/api/placeholder/300/168", 
+          type: "reel",
+          instagramUrl: "https://www.instagram.com/reel/nature2/"
+        },
       ]
     }
   ]
