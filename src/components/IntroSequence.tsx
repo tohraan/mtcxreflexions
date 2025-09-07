@@ -7,135 +7,143 @@ interface IntroSequenceProps {
   onComplete: () => void;
 }
 
+const CAROUSEL_IMAGES = [
+  'https://picsum.photos/1920/1080?random=1',
+  'https://picsum.photos/1920/1080?random=2',
+  'https://picsum.photos/1920/1080?random=3',
+  'https://picsum.photos/1920/1080?random=4',
+  'https://picsum.photos/1920/1080?random=5'
+];
+
 export const IntroSequence = ({ onComplete }: IntroSequenceProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const logoRef = useRef<HTMLDivElement>(null);
-  const subtitleRef = useRef<HTMLDivElement>(null);
-  const linesRef = useRef<HTMLDivElement>(null);
-  const [showSkip, setShowSkip] = useState(false);
-  const [hasStarted, setHasStarted] = useState(false);
+  const slab1Ref = useRef<HTMLDivElement>(null);
+  const slab2Ref = useRef<HTMLDivElement>(null);
+  const slab3Ref = useRef<HTMLDivElement>(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [hasInteracted, setHasInteracted] = useState(false);
 
   useEffect(() => {
-    // Start animation immediately when component mounts
-    setHasStarted(true);
-    setShowSkip(true);
-    setTimeout(() => {
-      startAnimation();
-    }, 500);
+    // Image carousel
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % CAROUSEL_IMAGES.length);
+    }, 3000);
 
-    const handleScroll = () => {
-      if (!hasStarted && window.scrollY > 10) {
-        setHasStarted(true);
-        setShowSkip(true);
-        startAnimation();
-      }
-    };
+    return () => clearInterval(interval);
+  }, []);
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [hasStarted]);
-
-  const startAnimation = () => {
+  const handleInteraction = () => {
+    if (hasInteracted) return;
+    setHasInteracted(true);
+    
     const tl = gsap.timeline({
-      onComplete: () => {
-        setTimeout(onComplete, 200);
-      }
+      onComplete: () => setTimeout(onComplete, 100)
     });
 
-    // Netflix-style reveal: Red swoosh from left to right
-    tl.to(linesRef.current, {
-      duration: 0.6,
+    // Three horizontal slabs sliding from left to right with staggered lengths
+    tl.to(slab1Ref.current, {
+      duration: 0.5,
       scaleX: 1,
       transformOrigin: "left center",
-      ease: "power2.out"
+      ease: "power2.inOut"
     })
-    // Logo appears during swoosh
-    .to(logoRef.current, {
-      duration: 0.4,
-      opacity: 1,
-      scale: 1,
-      ease: "power2.out"
+    .to(slab2Ref.current, {
+      duration: 0.45,
+      scaleX: 1,
+      transformOrigin: "left center",
+      ease: "power2.inOut"
     }, "-=0.3")
-    // Subtitle appears
-    .to(subtitleRef.current, {
-      duration: 0.3,
-      opacity: 1,
-      ease: "power2.out"
-    }, "-=0.1")
-    // Hold the logo briefly
-    .to({}, { duration: 1.2 })
-    // Quick fade out like Netflix
-    .to(containerRef.current, {
+    .to(slab3Ref.current, {
       duration: 0.4,
+      scaleX: 1,
+      transformOrigin: "left center",
+      ease: "power2.inOut"
+    }, "-=0.25")
+    .to(containerRef.current, {
+      duration: 0.3,
       opacity: 0,
       ease: "power2.in"
-    });
-  };
-
-  const skipIntro = () => {
-    gsap.to(containerRef.current, {
-      duration: 0.3,
-      opacity: 0,
-      onComplete
-    });
+    }, "-=0.1");
   };
 
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 z-50 bg-background flex items-center justify-center"
+      className="fixed inset-0 z-50 bg-black cursor-pointer"
+      onClick={handleInteraction}
+      onMouseEnter={handleInteraction}
+      onTouchStart={handleInteraction}
     >
-      {/* Netflix red swoosh reveal */}
-      <div
-        ref={linesRef}
-        className="absolute inset-0 bg-red-600 transform scale-x-0 origin-left"
-      />
+      {/* Background Image Carousel */}
+      <div className="absolute inset-0">
+        {CAROUSEL_IMAGES.map((image, index) => (
+          <div
+            key={index}
+            className={`absolute inset-0 transition-opacity duration-1000 ${
+              index === currentImageIndex ? 'opacity-100' : 'opacity-0'
+            }`}
+          >
+            <img
+              src={image}
+              alt={`Campus ${index + 1}`}
+              className="w-full h-full object-cover"
+            />
+          </div>
+        ))}
+        
+        {/* Black translucent overlay */}
+        <div className="absolute inset-0 bg-black/60" />
+      </div>
 
-      {/* Main content */}
-      <div className="text-center z-10">
-        {/* BITS Logo */}
-        <div
-          ref={logoRef}
-          className="mb-8 opacity-0"
-        >
-          <div className="w-40 h-40 mx-auto flex items-center justify-center">
+      {/* Large circle arc behind logo */}
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="w-[800px] h-[800px] border-4 border-white/20 rounded-full transform -translate-y-20" />
+      </div>
+
+      {/* BITS Logo */}
+      <div
+        ref={logoRef}
+        className="absolute inset-0 flex items-center justify-center z-10"
+      >
+        <div className="text-center">
+          <div className="w-60 h-60 mx-auto mb-8 drop-shadow-2xl">
             <img 
               src={bitsLogo} 
               alt="BITS Pilani Dubai Campus" 
-              className="w-full h-full object-contain drop-shadow-2xl"
+              className="w-full h-full object-contain"
             />
           </div>
-        </div>
-
-        {/* Subtitle */}
-        <div
-          ref={subtitleRef}
-          className="opacity-0"
-        >
-          <h2 className="text-xl font-light text-white tracking-wider">
-            BPDC, from the lens of student
-          </h2>
+          <h1 className="text-white text-2xl font-light tracking-wide">
+            BITS Pilani, Dubai Campus
+          </h1>
+          <p className="text-white/80 text-lg mt-2">
+            from the lens of students
+          </p>
         </div>
       </div>
 
-      {/* Skip button */}
-      {showSkip && (
-        <Button
-          onClick={skipIntro}
-          variant="outline"
-          className="absolute top-8 right-8 z-20 border-muted hover:border-primary hover:text-primary transition-colors"
-        >
-          Skip Intro
-        </Button>
-      )}
+      {/* Transition Slabs */}
+      <div
+        ref={slab1Ref}
+        className="absolute top-0 left-0 w-full h-1/3 bg-gradient-to-r from-red-600 via-red-500 to-red-400 transform scale-x-0 origin-left z-20"
+        style={{ width: '90%' }}
+      />
+      <div
+        ref={slab2Ref}
+        className="absolute top-1/3 left-0 w-full h-1/3 bg-gradient-to-r from-red-500 via-red-400 to-red-300 transform scale-x-0 origin-left z-20"
+        style={{ width: '85%' }}
+      />
+      <div
+        ref={slab3Ref}
+        className="absolute top-2/3 left-0 w-full h-1/3 bg-gradient-to-r from-red-400 via-red-300 to-red-200 transform scale-x-0 origin-left z-20"
+        style={{ width: '80%' }}
+      />
 
-      {/* Scroll indicator - only show if animation hasn't started */}
-      {!hasStarted && (
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-center animate-bounce">
-          <div className="text-sm text-muted-foreground mb-2">Animation will begin shortly...</div>
-          <div className="w-6 h-10 border-2 border-muted rounded-full mx-auto">
-            <div className="w-1 h-3 bg-muted rounded-full mx-auto mt-2 animate-pulse"></div>
-          </div>
+      {/* Interaction hint */}
+      {!hasInteracted && (
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-center animate-pulse z-10">
+          <p className="text-white/80 text-lg">Click, touch, or hover to enter</p>
         </div>
       )}
     </div>

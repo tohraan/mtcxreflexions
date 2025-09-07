@@ -17,25 +17,25 @@ const profiles: Profile[] = [
     id: 'sports',
     name: 'Sports',
     image: profileRed,
-    color: 'border-profiles-sports hover:border-profiles-sports'
+    color: 'border-red-500 hover:border-red-400'
   },
   {
     id: 'student-life',
     name: 'Student Life', 
-    image: profileYellow,
-    color: 'border-profiles-student hover:border-profiles-student'
+    image: profileBlue,
+    color: 'border-blue-500 hover:border-blue-400'
   },
   {
     id: 'academia',
     name: 'Academia',
-    image: profileBlue,
-    color: 'border-profiles-academia hover:border-profiles-academia'
+    image: profileYellow,
+    color: 'border-yellow-500 hover:border-yellow-400'
   },
   {
     id: 'nature',
     name: 'Nature',
     image: profileGreen,
-    color: 'border-profiles-nature hover:border-profiles-nature'
+    color: 'border-green-500 hover:border-green-400'
   }
 ];
 
